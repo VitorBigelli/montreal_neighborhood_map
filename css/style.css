@@ -11,15 +11,8 @@ h2 {
 	color: #f3f3f3;
 }
 
-#map {
-	position: absolute;
-	right: 0;
-	top: 51px;
-	left: 300px;
-	bottom: 0;		
-}
-
 #options-box {
+	transition: 0.6s;
 	position: absolute;
 	left: 0;
 	top: 0px;
@@ -27,39 +20,20 @@ h2 {
 	width: 300px;
 	text-align: center;	
 	background-color: #323232;
-}
-
-#location-text {
-	width: 70%;
+v
 }
 
 #header {
 	position: absolute;
-	top: 0;
-	right: 0;
 	left: 300px;
 	height: 50px;
 	background-color: #232323;
+	transition: 0.6s;
+	top: 0;
+	right: 0;
 }
 
-#filter {
-	width: 100%;
-	display: flex;
-	flex-wrap: wrap;
-}
 
-#container {
-
-	left: 200px;
-}
-
-#filter-location {
-	width: 28%;
-	background-color: #2B9BE3;
-	color: #fff;
-	border: none;
-	font-weight: bold;
-}
 
 #hamburger-menu {
 	padding: 6px 0 0 10px;
@@ -70,5 +44,50 @@ h2 {
     height: 3px;
     background-color: #2B9BE3;
     margin: 6px 0;
+}
+
+#hamburger-menu:hover {
+	cursor: pointer;
+}
+
+#map {
+	transition: 0.6s;
+	position: absolute;
+	top: 51px;
+	left: 300px;
+	bottom: 0;	
+	right: 0;
+}
+
+#location-text {
+	width: 70%;
+}
+
+#filter {
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+
+#filter-location {
+	width: 28%;
+	background-color: #2B9BE3;
+	color: #fff;
+	border: none;
+	font-weight: bold;
+}
+
+
+.hide {
+	transform: translateX(-300px);
+	transition: 0.6s;
+}
+
+.translate {
+	transform: translateX(-300px);
+	right: 0;
+	width: 100%;
+	transition: 0.6s;
 }
 
