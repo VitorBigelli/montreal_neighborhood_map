@@ -4,14 +4,19 @@
 	<title>Silicon Valley Nei</title>
 	<link rel="stylesheet" href="css/style.css">
 	<script src="js/jquery-3.2.1.min.js"></script>
+	<script src="js/knockout-3.4.2.js"></script>
 </head>
 <body>
 	<div id="options-box">
 		<h2>Silicon Valley Locations</h2>
 		<div id="filter">
-			<input type="input" id="location-text" placeholder="Ex: The Tech Museum of Innovation or 201 S Market St,">
+			<input type="search" id="location-text" placeholder="Ex: The Tech Museum of Innovation or 201 S Market St," data-bind="textInput: filter">
 			<input type="button" id="filter-location" value="Filter">
 		</div>
+		<ul data-bind="foreach: filteredLocations">
+			<li class="place-item" data-bind="text: title"> </li>
+			<hr>
+		</ul>
 	</div>
 
 	<div id="container">
@@ -23,13 +28,17 @@
 			</div>
 		</div>
 
-		<div id="map"></div>
+		<div id="map">
+		</div>
 	</div>
 	
-	<script src="js/knockout-3.4.2.js"></script>
-	<script src="js/map.js"></script>
+
 	<script async defer 
-		src="https://maps.googleapis.com/maps/api/js?libraries=places,drawing,geometry&key=AIzaSyB59U2PkUh39kgvNkRq65jEv35mq35hsgU&v=3&callback=ViewModel">
+		src="https://maps.googleapis.com/maps/api/js?libraries=places,drawing,geometry&key=AIzaSyB59U2PkUh39kgvNkRq65jEv35mq35hsgU&v=3&callback=initMap">
 	</script>
+	<script src="js/app.js"></script>
+	<script src="js/map.js"></script>
+
+
 </body>
 </html>

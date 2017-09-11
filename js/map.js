@@ -1,91 +1,65 @@
-// ------- MODEL ------ //
-var model = {
-	map: null,
-	markers: [],
-	polygon: null,
-	infowindow: null,
-	bounds: null
-};
+function initMap() {
 
-var ViewModel = function() {
+	var center = {lat: 37.3875, lng: -122.0575};
 
-	var bounds = new google.maps.LatLngBounds(); 
+	model.map = new google.maps.Map(document.getElementById("map"), {
+		center: center, 
+		zoom: 13
+	});
+	
+	var marker;
 
-	var locations = [
-		{title: "The Tech Museum of Innovation", position: {lat: 37.3316, lng: -121.8901}},
-		{title: "Computer History Museum", position: {lat: 37.4143, lng: -122.0774}}, 
-		{title: "Happy Hollow Park & Zoo", position: {lat: 37.3257, lng: -121.8614}}, 
-		{title: "Children's Discovery Museum of San Jose", position: {lat: 37.3268, lng: -121.8925}}, 
-		{title: "Googleplex", position: {lat: 37.4220, lng: -122.0841}}, 
-		{title: "Facebook HQ", position: {lat: 37.4847, lng: -122.1477}}, 
-		{title: "Tesla, Inc.", position: {lat: 37.394705, lng: -122.150325}}, 
-		{title: "Nvidia", position: {lat: 37.370728, lng: -121.963739}}
-	];
+	var infowindow = new google.maps.InfoWindow();
 
-	function initMap() {
+	for (var i=0; i < locations.length; i++) {
 		
-		var center = {lat: 37.3875, lng: -122.0575};
-		model.map = new google.maps.Map(document.getElementById("map"), {
-			center: center, 
-			zoom: 13
+		var location = locations[i];
+
+		marker = new google.maps.Marker({
+			title: location.title,
+			position: location.position
 		});
 		
-		var marker;
-
-		var infowindow = new google.maps.InfoWindow();
-
-		for (var i=0; i < locations.length; i++) {
-			
-			var location = locations[i];
-
-			marker = new google.maps.Marker({
-				title: location.title,
-				position: location.position
-			});
-			
-			model.markers.push(marker);
-			
-			marker.addListener("click", function() {
-				displayInfoWindow(infowindow, this);
-			});
-
-			showLocations();
-
-		}
-	}
-	
-
-	function showLocations() {
-		var length = model.markers.length;
-	
-		var marker;
+		model.markers.push(marker);
 		
-		for (var i=0; i < length; i++) {
-			marker = model.markers[i]; 
-			marker.setMap(model.map)
-			bounds.extend(marker.position);
-		}
-		model.map.fitBounds(bounds);
+		marker.addListener("click", function() {
+			displayInfoWindow(infowindow, this);
+		});
+
+		showLocations();
+
+	}
+}
+
+function showLocations() {
+	var length = model.markers.length;
+	var bounds = new google.maps.LatLngBounds();
+	var marker;
+	
+	for (var i=0; i < length; i++) {
+		marker = model.markers[i]; 
+		marker.setMap(model.map)
+		bounds.extend(marker.position);
 	}
 
-	function displayInfoWindow(infowindow, marker) {
-		if (infowindow.marker != marker) {
-			infowindow.marker = marker;
+	model.map.fitBounds(bounds);
+}
 
-			infowindow.addListener("closeclick", function() {
-				this.setMarker(null);
-			});
+function displayInfoWindow(infowindow, marker) {
+	if (infowindow.marker != marker) {
+		infowindow.marker = marker;
 
-			infowindow.setContent("<strong>" + marker.title + "</strong>"); 
-				infowindow.open(map, marker);
-		} 
-	}
+		infowindow.addListener("closeclick", function() {
+			this.marker = null;
+		});
 
-	initMap();
+		infowindow.setContent("<strong>" + marker.title + "</strong>"); 
+			infowindow.open(map, marker);
+	} 
+}
 
-	document.getElementById("hamburger-menu").addEventListener("click", function(e) {
-		$(document.getElementById("options-box")).toggleClass("hide");
-		$(document.getElementById("map")).toggleClass("translate");
-		$(document.getElementById("header")).toggleClass("translate");
-	});
-}; 
+document.getElementById("hamburger-menu").addEventListener("click", function(e) {
+	$(document.getElementById("options-box")).toggleClass("hide");
+	$(document.getElementById("map")).toggleClass("translate");
+	$(document.getElementById("header")).toggleClass("translate");
+});
