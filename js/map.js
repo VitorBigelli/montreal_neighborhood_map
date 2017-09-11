@@ -1,33 +1,49 @@
-
-function initMap() {
-	console.log("Initialize Map")
-	var center = {lat: 37.3875, lng: -122.0575};
-
+function initMap()  {
 	model.map = new google.maps.Map(document.getElementById("map"), {
-		center: center, 
+		center: {lat: 37.3875, lng: -122.0575}, 
 		zoom: 13
 	});
 	
+	var makeMarkerIcon = function(color) {
+		var markerImage = new google.maps.MarkerImage(
+			'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|' +
+			color + '|40|_|%E2%80%A2',
+			new google.maps.Size(21,34), 
+			new google.maps.Point(0,0),
+			new google.maps.Point(10,34),
+			new google.maps.Size(21,34));
+			return markerImage;		
+	};
+
+	ViewModel.highlightedIcon = makeMarkerIcon("ffffff");
+	ViewModel.defaultIcon = makeMarkerIcon("ee3333");
 	populateMap();
+
+	// Function to change marker color
+
 }
 
 function populateMap() {
-	var marker;
-	var infowindow = new google.maps.InfoWindow();
 	
-	for (var i=0; i < ViewModel.filteredLocations().length; i++) {
+	var locations = ViewModel.filteredLocations();
+	var location;
+
+	for (var i=0; i < locations.length; i++) {
 	
-		var location = ViewModel.filteredLocations()[i];
+		location = locations[i];
 
 		marker = new google.maps.Marker({
 			title: location.title,
-			position: location.position
+			position: location.position,
+			infowindow: new google.maps.InfoWindow(),
+			location: location,
+			icon: ViewModel.defaultIcon
 		});
 		
 		model.markers.push(marker);
 		
 		marker.addListener("click", function() {
-			displayInfoWindow(infowindow, this);
+			ViewModel.displayInfoWindow(this.location);
 		});
 	}
 	showLocations();
@@ -35,33 +51,16 @@ function populateMap() {
 
 function showLocations() {
 	var length = model.markers.length;
-	var bounds = new google.maps.LatLngBounds();
+	model.bounds = new google.maps.LatLngBounds();
 	var marker;
 	
 	for (var i=0; i < length; i++) {
 		marker = model.markers[i]; 
 		marker.setMap(model.map)
-		bounds.extend(marker.position);
+		model.bounds.extend(marker.position);
 	}
 
-	model.map.fitBounds(bounds);
-}
-
-function displayInfoWindow(infowindow, marker) {
-	if (infowindow.marker != marker) {
-		infowindow.marker = marker;
-
-		infowindow.addListener("closeclick", function() {
-			this.marker = null;
-		});
-
-		infowindow.setContent("<strong>" + marker.title + "</strong>"); 
-			infowindow.open(model.map, marker);
-	} 
-}
-
-function refreshMap() {
-
+	model.map.fitBounds(model.bounds);
 }
 
 document.getElementById("hamburger-menu").addEventListener("click", function(e) {
@@ -69,6 +68,4 @@ document.getElementById("hamburger-menu").addEventListener("click", function(e) 
 	$(document.getElementById("map")).toggleClass("translate");
 	$(document.getElementById("header")).toggleClass("translate");
 });
-
-
 

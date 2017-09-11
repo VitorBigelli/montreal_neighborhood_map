@@ -21,8 +21,6 @@ var model = {
 
 //------------------ViewModel-------------------//
 var ViewModel = function() {
-	console.log("Initialize ViewModel")
-
 	var self = this;
 
 	this.locations = ko.observableArray([]); 
@@ -30,14 +28,17 @@ var ViewModel = function() {
 
 	for (var i=0; i < locations.length; i++) {
 		var location = locations[i];
-		location.id = i;
-		self.locations.push(location);
+		self.locations.push({
+			title: location.title,
+			position: location.position, 
+			id: i
+		});
 	}
-
 	// Computed array to the locations that will be displayed
 	// It uses the this.location array and the string typed 
 	// by the user to define which locations to display
 	this.filteredLocations = ko.computed(filterLocations); 
+
 	function filterLocations() {
 		var filter = self.filter();
 		// Check if the filter field is empty,
@@ -66,12 +67,28 @@ var ViewModel = function() {
 		});
 	}
 
-	this.displayInfoWindow = function() {
-		var infowindow = new google.maps.InfoWindow();
-		var marker = model.markers[this.id]; 
-		displayInfoWindow(infowindow, marker);
-	}
+	this.displayInfoWindow = function(data) {
+		if (model.infowindow) {
+			model.infowindow.setMap(null);
+			marker.setIcon(ViewModel.defaultIcon);
+		}
+		marker = model.markers[data.id];
+
+		model.infowindow = marker.infowindow;
+
+		model.infowindow.addListener("closeclick", function() {
+			model.infowindow.marker = null;
+			marker.setIcon(ViewModel.defaultIcon);
+		});
+
+		marker.setIcon(self.highlightedIcon);
+		model.infowindow.setContent("<strong>" + marker.title + "</strong>"); 
+		model.infowindow.open(model.map, marker);
+	} ;
+	
+	
+
 };
 
-ViewModel = new ViewModel()
+ViewModel = new ViewModel();
 ko.applyBindings(ViewModel);
