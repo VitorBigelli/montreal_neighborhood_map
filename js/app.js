@@ -43,7 +43,7 @@ var ViewModel = function() {
 		}
 
 		return self.locations().filter( function(i) {
-			return i.title.indexOf(filter) > -1;
+			return i.title.toLowerCase().indexOf(filter.toLowerCase()) > -1;
 		});
 		
 	});
