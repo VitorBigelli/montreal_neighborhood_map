@@ -1,3 +1,4 @@
+// An array with the locations titles and positions
 var locations = [
 	{title: "The Tech Museum of Innovation", position: {lat: 37.3316, lng: -121.8901}},
 	{title: "Computer History Museum", position: {lat: 37.4143, lng: -122.0774}}, 
@@ -9,7 +10,7 @@ var locations = [
 	{title: "Nvidia", position: {lat: 37.370728, lng: -121.963739}}
 ];
 
-
+//----------------------MODEL-------------------//
 var model = {
 	map: null,
 	markers: [],
@@ -18,35 +19,54 @@ var model = {
 	bounds: null
 };
 
-
+//------------------ViewModel-------------------//
 var ViewModel = function() {
+	console.log("Initialize ViewModel")
+
 	var self = this;
 
 	this.locations = ko.observableArray([]); 
 	this.filter = ko.observable("");
 
+	// Create a
 	for (var i=0; i < locations.length; i++) {
-			
-			var location = {
-				title: locations[i].title,
-				position: locations[i].position,
-				visible: true
-			};
-
-			self.locations.push(location);
+		var location = locations[i];
+		location.id = i;
+		self.locations.push(location);
 	}
 
+	// Computed array to the locations that will be displayed
+	// It uses the this.location array and the string typed 
+	// by the user to define which locations to display
 	this.filteredLocations = ko.computed( function() {
 		var filter = self.filter();
+		// Check if the filter field is empty,
+		// if so, return the full locations array.
 		if (!filter) { 
 			return self.locations(); 
 		}
 
-		return self.locations().filter( function(i) {
-			return i.title.toLowerCase().indexOf(filter.toLowerCase()) > -1;
+		// If the filter field is not empty,
+		// return the array with the filter applyed.
+		return self.locations().filter( function(location) {
+			// Return true if the typed string is within the location title
+			// And false otherwise
+			hasString = location.title.toLowerCase().indexOf(filter.toLowerCase()) > -1;
+			if (!hasString) {
+				model.markers[location.id].setMap(null);
+			} else {
+				model.markers[location.id].setMap(model.map);
+			}
+			return hasString;
+			
 		});
-		
+
+	function getFilteredLocations() {
+		return self.filteredLocations();		
+	};
 	});
+
 };
 
-ko.applyBindings(new ViewModel());
+ViewModel = new ViewModel()
+ko.applyBindings(ViewModel);

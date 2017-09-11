@@ -1,5 +1,5 @@
 function initMap() {
-
+	console.log("Initialize Map")
 	var center = {lat: 37.3875, lng: -122.0575};
 
 	model.map = new google.maps.Map(document.getElementById("map"), {
@@ -7,13 +7,17 @@ function initMap() {
 		zoom: 13
 	});
 	
+	populateMap();
+}
+
+function populateMap() {
 	var marker;
 
 	var infowindow = new google.maps.InfoWindow();
 
-	for (var i=0; i < locations.length; i++) {
-		
-		var location = locations[i];
+	for (var i=0; i < ViewModel.filteredLocations().length; i++) {
+	
+		var location = ViewModel.filteredLocations()[i];
 
 		marker = new google.maps.Marker({
 			title: location.title,
@@ -25,10 +29,8 @@ function initMap() {
 		marker.addListener("click", function() {
 			displayInfoWindow(infowindow, this);
 		});
-
-		showLocations();
-
 	}
+	showLocations();
 }
 
 function showLocations() {
@@ -58,8 +60,15 @@ function displayInfoWindow(infowindow, marker) {
 	} 
 }
 
+function refreshMap() {
+
+}
+
 document.getElementById("hamburger-menu").addEventListener("click", function(e) {
 	$(document.getElementById("options-box")).toggleClass("hide");
 	$(document.getElementById("map")).toggleClass("translate");
 	$(document.getElementById("header")).toggleClass("translate");
 });
+
+
+
