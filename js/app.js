@@ -28,7 +28,6 @@ var ViewModel = function() {
 	this.locations = ko.observableArray([]); 
 	this.filter = ko.observable("");
 
-	// Create a
 	for (var i=0; i < locations.length; i++) {
 		var location = locations[i];
 		location.id = i;
@@ -39,7 +38,6 @@ var ViewModel = function() {
 	// It uses the this.location array and the string typed 
 	// by the user to define which locations to display
 	this.filteredLocations = ko.computed(filterLocations); 
-
 	function filterLocations() {
 		var filter = self.filter();
 		// Check if the filter field is empty,
@@ -66,6 +64,12 @@ var ViewModel = function() {
 			}
 			return hasString;
 		});
+	}
+
+	this.displayInfoWindow = function() {
+		var infowindow = new google.maps.InfoWindow();
+		var marker = model.markers[this.id]; 
+		displayInfoWindow(infowindow, marker);
 	}
 };
 

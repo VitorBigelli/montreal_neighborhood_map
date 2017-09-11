@@ -1,3 +1,4 @@
+
 function initMap() {
 	console.log("Initialize Map")
 	var center = {lat: 37.3875, lng: -122.0575};
@@ -12,9 +13,8 @@ function initMap() {
 
 function populateMap() {
 	var marker;
-
 	var infowindow = new google.maps.InfoWindow();
-
+	
 	for (var i=0; i < ViewModel.filteredLocations().length; i++) {
 	
 		var location = ViewModel.filteredLocations()[i];

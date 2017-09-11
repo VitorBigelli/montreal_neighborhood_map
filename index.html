@@ -10,11 +10,11 @@
 	<div id="options-box">
 		<h2>Silicon Valley Locations</h2>
 		<div id="filter">
-			<input type="search" id="location-text" placeholder="Ex: The Tech Museum of Innovation or 201 S Market St," data-bind="textInput: filter">
+			<input type="search" placeholder="The Tech Museum of Innovation" data-bind="textInput: filter">
 			<input type="button" id="filter-location" value="Filter">
 		</div>
 		<ul data-bind="foreach: filteredLocations">
-			<li class="place-item" data-bind="text: title"> </li>
+			<li class="place-item" data-bind="text: title, click: $parent.displayInfoWindow"> </li>
 			<hr>
 		</ul>
 	</div>

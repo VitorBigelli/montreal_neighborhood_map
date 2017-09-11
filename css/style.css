@@ -20,6 +20,7 @@ h2 {
 	width: 300px;
 	text-align: center;	
 	background-color: #323232;
+	padding: 0;
 }
 
 #header {
@@ -91,19 +92,20 @@ h2 {
 
 ul {
 	list-style-type: none;
-	padding: 5px;
+	padding: 0;
 }
 
 
 li {
 	width: 100%;
 	text-align: left;	
-	height: 30px;
+	height: 25px;
+	padding-top: 5px;
+	font-size: 15px;
 	color: #666;
 	vertical-align: middle
 }
 
-hr {
-	border-color: #ddd;
-	width: 100%;
+#selected {
+	background-color: #ddd;
 }
