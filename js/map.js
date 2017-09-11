@@ -56,7 +56,7 @@ function displayInfoWindow(infowindow, marker) {
 		});
 
 		infowindow.setContent("<strong>" + marker.title + "</strong>"); 
-			infowindow.open(map, marker);
+			infowindow.open(model.map, marker);
 	} 
 }
 

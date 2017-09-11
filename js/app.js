@@ -38,19 +38,26 @@ var ViewModel = function() {
 	// Computed array to the locations that will be displayed
 	// It uses the this.location array and the string typed 
 	// by the user to define which locations to display
-	this.filteredLocations = ko.computed( function() {
+	this.filteredLocations = ko.computed(filterLocations); 
+
+	function filterLocations() {
 		var filter = self.filter();
 		// Check if the filter field is empty,
 		// if so, return the full locations array.
 		if (!filter) { 
+			for (var i=0; i < model.markers.length; i++) {
+				if (!model.markers[i].map) {
+					model.markers[i].setMap(model.map);
+				}
+			}
 			return self.locations(); 
 		}
-
 		// If the filter field is not empty,
 		// return the array with the filter applyed.
-		return self.locations().filter( function(location) {
+		return self.locations().filter(function(location) {
 			// Return true if the typed string is within the location title
 			// And false otherwise
+			console.log(filter);
 			hasString = location.title.toLowerCase().indexOf(filter.toLowerCase()) > -1;
 			if (!hasString) {
 				model.markers[location.id].setMap(null);
@@ -58,14 +65,8 @@ var ViewModel = function() {
 				model.markers[location.id].setMap(model.map);
 			}
 			return hasString;
-			
 		});
-
-	function getFilteredLocations() {
-		return self.filteredLocations();		
-	};
-	});
-
+	}
 };
 
 ViewModel = new ViewModel()
