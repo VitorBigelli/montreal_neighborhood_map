@@ -122,8 +122,8 @@ var ViewModel = function() {
 		model.infowindow.open(model.map, marker);
 	};
 
-	this.locationListListener = function(location) {
-		var marker = model.markers[location.id];
+	this.locationListListener = function(data) {
+		var marker = model.markers[data.id];
 		self.populateInfoWindow(marker, model.infowindow);
 	};
 

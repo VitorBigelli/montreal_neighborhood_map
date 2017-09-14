@@ -20,8 +20,8 @@
 			<input type="search" placeholder="The Tech Museum of Innovation" id="location-text" data-bind="textInput: filter, change: $parent.updateMarkers">
 			<input type="button" id="filter-location" value="Filter" data-bind="click: ViewModel.toggleShowClass">
 		</div>
-		<ul data-bind="foreach: filteredLocations">
-			<li class="place-item" data-bind="text: title, click: $parent.locationListListener, click: $parent.toggleShowMenu"> </li>
+		<ul data-bind="foreach: filteredLocations, click: toggleShowClass">
+			<li class="place-item" data-bind="text: title, click: $parent.locationListListener"> </li>
 			<hr>
 		</ul>
 	</div>
