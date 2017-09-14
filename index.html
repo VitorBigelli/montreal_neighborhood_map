@@ -10,26 +10,24 @@
 	<div id="options-box">
 		<h2>Silicon Valley Locations</h2>
 		<div id="filter">
-			<input type="search" placeholder="The Tech Museum of Innovation" id="location-text" data-bind="textInput: filter">
+			<input type="search" placeholder="The Tech Museum of Innovation" id="location-text" data-bind="textInput: filter, change: $parent.updateMarkers
 			<input type="button" id="filter-location" value="Filter">
 		</div>
 		<ul data-bind="foreach: filteredLocations">
-			<li class="place-item" data-bind="text: title, click: $parent.displayInfoWindow"> </li>
+			<li class="place-item" data-bind="text: title, click: $parent.locationListListener"> </li>
 			<hr>
 		</ul>
 	</div>
 
-	<div id="container">
-		<div id="header">
-			<div id="hamburger-menu">
-				<div></div>
-				<div></div>
-				<div></div>
-			</div>
+	<div id="header">
+		<div id="hamburger-menu">
+			<div></div>
+			<div></div>
+			<div></div>
 		</div>
+	</div>
 
-		<div id="map">
-		</div>
+	<div id="map">
 	</div>
 	
 	<script async defer 
