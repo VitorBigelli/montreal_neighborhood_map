@@ -13,9 +13,9 @@ var locations = [
 var model = {
 	map: null,
 	markers: [],
-	polygon: null,
 	infowindow: null,
-	bounds: null
+	bounds: null,
+	streetViewService: null
 };
 
 var ViewModel = function() {
@@ -32,6 +32,21 @@ var ViewModel = function() {
 			id: i
 		});
 	}
+
+	this.displayAllMarkers = function() {
+		for (var i=0; i < model.markers.length; i++) {
+			model.markers[i].setMap(model.map);
+		}
+	}
+
+	this.hideMarkerById = function(id) {
+		var markers = model.markers;
+		for (var i=0; i < markers.length; i++) {
+			if (markers[i].id === id) {
+				model.markers[i].setMap(null);
+			}
+		}
+	};
 	// Computed array to the locations that will be displayed
 	// It uses the this.location array and the string typed 
 	// by the user to define which locations to display
@@ -40,6 +55,7 @@ var ViewModel = function() {
 		// Check if the filter field is empty,
 		// if so, return the full locations array.
 		if (!filter) { 
+			self.displayAllMarkers();
 			return self.locations(); 
 		}
 		// If the filter field is not empty,
@@ -49,26 +65,29 @@ var ViewModel = function() {
 			// And false otherwise
 			console.log(filter);
 			hasString = location.title.toLowerCase().indexOf(filter.toLowerCase()) > -1;
+			if (!hasString) {
+				self.hideMarkerById(location.id);
+			}
 			return hasString;
 		});
 	});
 
 	this.storeMarker = function(marker) {
 		model.markers.push(marker);
-	}
+	};
 
-	this.initMap = function(map, markers, bounds, infowindow) {
+	this.initMap = function(map, markers, bounds, infowindow, streetViewService) {
 		model.map = map; 
 		model.markers = markers; 
 		model.bounds = bounds;
 		model.infowindow = infowindow; 
-
+		model.streetViewService = streetViewService
 		self.displayMarkers();
-	}
+	};
 
 	this.getMarkers = function() {
 		return model.markers;
-	}
+	};
 
 	this.displayMarkers = function() {
 		markers = model.markers;
@@ -79,31 +98,57 @@ var ViewModel = function() {
 				markers[i].setMap(model.map);
 				model.bounds.extend(markers[i].position)
 			}
- 		model.map.fitBounds(bounds);
+ 			model.map.fitBounds(bounds);
 		}
-	}
+	};
 
 	this.populateInfoWindow = function(marker) {
 		if (model.infowindow.marker != marker) {
 			model.infowindow.marker = marker;
 			marker.infowindow = model.infowindow;
-			model.infowindow.setContent("<div class='infowindow'>" + marker.title + "</div>");
+			model.infowindow.setContent("<div class='infowindow'>" + marker.title + "</div><div id='pano'></div>");
 		}
 
 		self.displayInfoWindow(marker);
-	}
+	};
 
 	this.displayInfoWindow = function(marker) {
 		var id = marker.id;
-		model.infowindow.open(model.map, model.markers[id]);
-	}
+		self.configStreetView(model.markers[id]);
+		model.infowindow.open(model.map, marker);
+	};
 
 	this.locationListListener = function(location) {
-		console.log(location);
 		var marker = model.markers[location.id];
 		self.populateInfoWindow(marker, model.infowindow);
-	}
+	};
 
+	this.configStreetView = function(marker) {
+		function getStreetView(data, status) {
+			if (status == google.maps.StreetViewStatus.OK) {
+				console.log(data.location.latLng);
+				var nearStreetViewLocation = data.location.latLng;
+
+				var heading = google.maps.geometry.spherical.computeHeading(
+					nearStreetViewLocation, marker.position);
+
+				var panoramaOptions = {
+					position: nearStreetViewLocation,
+					pov: {
+						heading: heading,
+						pitch: 30
+					}
+				}; 
+				var panorama = new google.maps.StreetViewPanorama(
+					document.getElementById("pano"), panoramaOptions);
+			}
+			else {
+				console.log(status)
+			}
+		} 
+		
+		return model.streetViewService.getPanoramaByLocation(marker.position, 30, getStreetView)
+	};
 };
 
 ViewModel = new ViewModel();
@@ -111,8 +156,10 @@ ko.applyBindings(ViewModel);
 
 function initMap() {
 
-	var bounds = new google.maps.LatLngBounds();
+	var bounds = new google.maps.LatLngBounds(); 
 	var infowindow = new google.maps.InfoWindow(); 
+	var streetViewService = new google.maps.StreetViewService();
+
 
 	var map = new google.maps.Map(document.getElementById("map"), {
 		center: {lat: 37.3700, lng: -122.0400}, 
@@ -138,12 +185,10 @@ function initMap() {
 
 	var markers = ViewModel.getMarkers();
 
-	ViewModel.initMap(map, markers, bounds, infowindow); 
+	ViewModel.initMap(map, markers, bounds, infowindow, streetViewService); 
 
 	document.getElementById("hamburger-menu").addEventListener("click", function() {
-		$(document.getElementById("header")).toggleClass("translate");
 		$(document.getElementById("options-box")).toggleClass("show");
 	});
-
 }
 

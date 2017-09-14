@@ -8,6 +8,7 @@ body {
 }
 
 h2 {
+	font-size: 40px;
 	color: #f3f3f3;
 }
 
@@ -25,23 +26,25 @@ h2 {
 }
 
 #header {
-	height: 10%;
+	height: 120px;
 	background-color: #232323;
 	transition: 0.6s;
-	width: 100%;
 }
 
 #hamburger-menu {
-	padding: 6px 0 0 10px;
-	width: 60px;
+	position: absolute;
+	padding: 6px 0 ;
+	width: 80px;
 	height: 80px;
+	vertical-align: middle;
+	left: 410px;
 }
 
 #hamburger-menu div {
 	width: 100%;
-    height: 8px;
+    height: 15px;
     background-color: #2B9BE3;
-    margin: 10px 0;
+    margin: 15px 0;
 }
 
 #hamburger-menu:hover {
@@ -51,7 +54,7 @@ h2 {
 #map {
 	transition: 0.6s;
 	width: 100%;
-	height: 90%;
+	height: calc(100% - 120px);
 }
 
 #location-text {
@@ -62,6 +65,8 @@ h2 {
 	width: 100%;
 	display: flex;
 	flex-wrap: wrap;
+	font-size: 50px;
+	height: 50px;
 }
 
 #filter-location {
@@ -77,12 +82,6 @@ h2 {
 	transition: 0.6s;
 }
 
-.translate {
-	transform: translateX(400px);
-	transition: 0.6s;
-}
-
-
 ul {
 	list-style-type: none;
 	padding: 0;
@@ -92,9 +91,9 @@ ul {
 li {
 	width: 100%;
 	text-align: left;	
-	height: 25px;
+	height: auto;
 	padding-top: 5px;
-	font-size: 15px;
+	font-size: 30px;
 	color: #666;
 	vertical-align: middle
 }
@@ -107,4 +106,9 @@ li {
 .infowindow {
 	font-size: 30px;
 	font-family: "Arial", "Open Sans";
+}
+
+#pano {
+	width: 300px; 
+	height: 300px;
 }
