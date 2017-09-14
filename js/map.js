@@ -35,8 +35,12 @@ var ViewModel = function() {
 
 	this.displayAllMarkers = function() {
 		for (var i=0; i < model.markers.length; i++) {
-			model.markers[i].setMap(model.map);
+			displayMarker(model.markers[i]);
 		}
+	}
+
+	this.displayMarker = function(marker) {
+		marker.setMap(model.map);
 	}
 
 	this.hideMarkerById = function(id) {
@@ -95,7 +99,7 @@ var ViewModel = function() {
 		for (var i=0; i < markers.length; i++) {
 			for (var j=0; j < self.filteredLocations().length; j++) {
 				if (markers[i].id === self.filteredLocations()[i].id);
-				markers[i].setMap(model.map);
+				self.displayMarker(markers[i]);
 				model.bounds.extend(markers[i].position)
 			}
  			model.map.fitBounds(bounds);
@@ -143,12 +147,16 @@ var ViewModel = function() {
 					document.getElementById("pano"), panoramaOptions);
 			}
 			else {
-				console.log(status)
+				document.getElementById("pano").innerHTML = "No street view found";
 			}
 		} 
 		
 		return model.streetViewService.getPanoramaByLocation(marker.position, 30, getStreetView)
 	};
+
+	this.toggleShowClass = function() {
+		$(document.getElementById("options-box")).toggleClass("show");
+	}
 };
 
 ViewModel = new ViewModel();
@@ -187,8 +195,6 @@ function initMap() {
 
 	ViewModel.initMap(map, markers, bounds, infowindow, streetViewService); 
 
-	document.getElementById("hamburger-menu").addEventListener("click", function() {
-		$(document.getElementById("options-box")).toggleClass("show");
-	});
+	
 }
 
