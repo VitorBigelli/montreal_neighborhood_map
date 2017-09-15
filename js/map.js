@@ -207,10 +207,15 @@ var ViewModel = function() {
 			for (var i=0; i < items.length; i++) {
 				self.nytArticles.push(ko.observable(items[i]));
 			};
-		}).fail( function(e) {
+		})
+		.done( function() {
+			$(document.getElementsByTagName("article")).show();
+		})
+		.fail( function(e) {
 				window.alert("New York Times Articles Could Not Be Loaded")
-		});
-		$(document.getElementsByTagName("article")).show();
+		})
+		
+		
 	};
 
 	// Change the visibility of the options-box
