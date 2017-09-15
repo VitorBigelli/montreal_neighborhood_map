@@ -27,16 +27,21 @@
 	</div>
 
 	<div id="header">
-		</div>
+	</div>
+	
+	<div id="map">
 	</div>
 
-	<div id="map">
+	<div id="nyt-articles">
+		<h4 data-bind="text: nytHeader"> </h4>
+		<ul id="nyt-articles-list" data-bind="foreach: nytArticles">
+			<li class="nyt-article" data-bind="text: headline.main"></li>
+		</ul>
 	</div>
 	
 	<script async defer 
 		src="https://maps.googleapis.com/maps/api/js?libraries=places,drawing,geometry&key=AIzaSyB59U2PkUh39kgvNkRq65jEv35mq35hsgU&v=3&callback=initMap">
 	</script>
-	<script src="js/app.js" async defer></script>
 	<script src="js/map.js" async defer></script>
 
 </body>

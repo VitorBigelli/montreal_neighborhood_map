@@ -23,6 +23,8 @@ var ViewModel = function() {
 
 	this.locations = ko.observableArray([]); 
 	this.filter = ko.observable("");
+	this.nytArticles = ko.observableArray([]);
+	this.nytHeader = ko.observable("");
 
 	for (var i=0; i < locations.length; i++) {
 		var location = locations[i];
@@ -106,13 +108,14 @@ var ViewModel = function() {
 		}
 	};
 
+
 	this.populateInfoWindow = function(marker) {
 		if (model.infowindow.marker != marker) {
 			model.infowindow.marker = marker;
 			marker.infowindow = model.infowindow;
 			model.infowindow.setContent("<div class='infowindow'>" + marker.title + "</div><div id='pano'></div>");
 		}
-
+		self.showNytArticles(marker);
 		self.displayInfoWindow(marker);
 	};
 
@@ -120,6 +123,7 @@ var ViewModel = function() {
 		var id = marker.id;
 		self.configStreetView(model.markers[id]);
 		model.infowindow.open(model.map, marker);
+
 	};
 
 	this.locationListListener = function(data) {
@@ -130,7 +134,6 @@ var ViewModel = function() {
 	this.configStreetView = function(marker) {
 		function getStreetView(data, status) {
 			if (status == google.maps.StreetViewStatus.OK) {
-				console.log(data.location.latLng);
 				var nearStreetViewLocation = data.location.latLng;
 
 				var heading = google.maps.geometry.spherical.computeHeading(
@@ -153,6 +156,25 @@ var ViewModel = function() {
 		
 		return model.streetViewService.getPanoramaByLocation(marker.position, 30, getStreetView)
 	};
+
+	this.showNytArticles = function(marker) {
+		var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
+		url += "?" + $.param({
+			'api-key': "2954f517830e4fcf9242caa8eef9f2be",
+			'q': marker.title
+		}); 
+
+		$.getJSON(url, function(data) {
+			self.nytHeader("New York Times Articles About " + marker.title);
+			console.log(self.nytHeader());
+			var items = data.response.docs; 
+			for (var i=0; i < items.length; i++) {
+				console.log(items[i]);
+				self.nytArticles.push(ko.observable(items[i]));
+			};
+		});
+		$(document.getElementById("nyt-articles")).addClass("show-nyt-articles");
+	}
 
 	this.toggleShowClass = function() {
 		$(document.getElementById("options-box")).toggleClass("show");
@@ -183,7 +205,6 @@ function initMap() {
 			position: locations[i].position, 
 			id: locations[i].id
 		}); 
-
 		marker.addListener("click", function(marker) {
 			ViewModel.populateInfoWindow(this);
 		});
@@ -194,7 +215,5 @@ function initMap() {
 	var markers = ViewModel.getMarkers();
 
 	ViewModel.initMap(map, markers, bounds, infowindow, streetViewService); 
-
-	
 }
 
