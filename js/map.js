@@ -69,7 +69,6 @@ var ViewModel = function() {
 		return self.locations().filter(function(location) {
 			// Return true if the typed string is within the location title
 			// And false otherwise
-			console.log(filter);
 			hasString = location.title.toLowerCase().indexOf(filter.toLowerCase()) > -1;
 			if (!hasString) {
 				self.hideMarkerById(location.id);
@@ -114,6 +113,10 @@ var ViewModel = function() {
 			model.infowindow.marker = marker;
 			marker.infowindow = model.infowindow;
 			model.infowindow.setContent("<div class='infowindow'>" + marker.title + "</div><div id='pano'></div>");
+
+			//Listener to close the NYTimes articles when the respective
+			//infowindow is closed.
+			model.infowindow.addListener("closeclick", self.closeNytArticles);
 		}
 		self.showNytArticles(marker);
 		self.displayInfoWindow(marker);
@@ -123,11 +126,11 @@ var ViewModel = function() {
 		var id = marker.id;
 		self.configStreetView(model.markers[id]);
 		model.infowindow.open(model.map, marker);
-
 	};
 
 	this.locationListListener = function(data) {
 		var marker = model.markers[data.id];
+		self.closeNytArticles();
 		self.populateInfoWindow(marker, model.infowindow);
 	};
 
@@ -169,7 +172,6 @@ var ViewModel = function() {
 			self.nytArticles([]);
 			var items = data.response.docs; 
 			for (var i=0; i < items.length; i++) {
-				console.log(items[i]);
 				self.nytArticles.push(ko.observable(items[i]));
 			};
 		});
