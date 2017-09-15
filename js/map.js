@@ -194,7 +194,7 @@ var ViewModel = function() {
 	// This function show the New York Times articles for selected
 	// location
 	this.showNytArticles = function(marker) {
-		var url = "https://api.nytisadfasdfasdfmes.com/svc/search/v2/articlesearch.json";
+		var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
 		url += "?" + $.param({
 			'api-key': "2954f517830e4fcf9242caa8eef9f2be",
 			'q': marker.title
