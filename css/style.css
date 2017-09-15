@@ -22,7 +22,7 @@ li {
 	width: 100%;
 	text-align: left;	
 	height: auto;
-	padding-top: 5px;
+	padding: 5px 0 0 5px;
 	font-size: 18px;
 	color: #666;
 	vertical-align: middle
@@ -115,9 +115,9 @@ li {
 
 #nyt-articles {
 	position: absolute; 
-	left: 15px; 
 	bottom: 0;
-	width: 90%; 
+	left: 10px;
+	width: 300px; 
 	height: 200px;
 	z-index: 1;
 	background: #fff;
@@ -147,16 +147,14 @@ li {
 	margin-bottom: 10px;
 }
 
-#nyt-img {
-	width: 70%;
-	margin-left: 15%;
-	margin-right: 15%;
-}
-
-#nyt-img-container {
-	width: 100%;
-}
-
 #close-nyt-articles:hover {
 	cursor: pointer;
+}
+
+@media screen and (min-width: 750px) {
+	#nyt-articles {
+		top: 50px;
+		right: 0;
+		left: auto;
+	}
 }

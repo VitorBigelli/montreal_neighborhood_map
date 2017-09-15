@@ -1,3 +1,4 @@
+// Array of locations to be displayed
 var locations = [
 	{title: "The Tech Museum of Innovation", position: {lat: 37.3316, lng: -121.8901}},
 	{title: "Computer History Museum", position: {lat: 37.4143, lng: -122.0774}}, 
@@ -20,12 +21,13 @@ var model = {
 
 var ViewModel = function() {
 	var self = this;
-
+	// Creating observable objects
 	this.locations = ko.observableArray([]); 
 	this.filter = ko.observable("");
 	this.nytArticles = ko.observableArray([]);
 	this.nytHeader = ko.observable("");
 
+	// Pushing the locations into an observableArray
 	for (var i=0; i < locations.length; i++) {
 		var location = locations[i];
 		self.locations.push({
@@ -35,17 +37,22 @@ var ViewModel = function() {
 		});
 	};
 
-	this.displayAllMarkers = function(data) {
+	// This function display all the markers
+	this.displayAllMarkers = function() {
 		for (var i=0; i < model.markers.length; i++) {
 			self.displayMarker(model.markers[i]);
 			model.bounds.extend(markers[i].position);
 		}
 	};
 
+	// This function takes a marker as parameter
+	// and display it on the map
 	this.displayMarker = function(marker) {
 		marker.setMap(model.map);
 	};
 
+	// This functio takes a marker id as paramenter
+	// and removes that marker from the map
 	this.hideMarkerById = function(id) {
 		var markers = model.markers;
 		for (var i=0; i < markers.length; i++) {
@@ -54,6 +61,7 @@ var ViewModel = function() {
 			}
 		}
 	};
+
 	// Computed array to the locations that will be displayed
 	// It uses the this.location array and the string typed 
 	// by the user to define which locations to display
@@ -78,24 +86,32 @@ var ViewModel = function() {
 		});
 	});
 
+	// This function takes a marker as parameter and 
+	// stores it in the model
 	this.storeMarker = function(marker) {
 		model.markers.push(marker);
 	};
 
+	// This function is called by the initMap global function
+	// It takes all the google.maps objects created and store them
+	// in the model. Than call the displayMarkers() function
 	this.initMap = function(map, markers, bounds, infowindow, streetViewService) {
 		model.map = map; 
 		model.markers = markers; 
 		model.bounds = bounds;
 		model.infowindow = infowindow; 
 		model.streetViewService = streetViewService
-		self.displayMarkers();
+		self.displayFilteredMarkers();
 	};
 
+	// This function returns the stored markers
 	this.getMarkers = function() {
 		return model.markers;
 	};
 
-	this.displayMarkers = function() {
+	// This function display the markers based on the filteredLocations
+	// computed array  
+	this.displayFilteredMarkers = function() {
 		markers = model.markers;
 		for (var i=0; i < markers.length; i++) {
 			for (var j=0; j < self.filteredLocations().length; j++) {
@@ -107,6 +123,8 @@ var ViewModel = function() {
 		}
 	};
 
+	// This function populates the infowindow with unique information
+	// about the location
 	this.populateInfoWindow = function(marker) {
 		if (model.infowindow.marker != marker) {
 			model.infowindow.marker = marker;
@@ -126,6 +144,7 @@ var ViewModel = function() {
 
 	this.selectedMarker = null;
 
+	// This function displays the infowindow
 	this.displayInfoWindow = function(marker) {
 		var id = marker.id;
 		self.configStreetView(model.markers[id]);
@@ -138,26 +157,24 @@ var ViewModel = function() {
 		model.infowindow.open(model.map, marker);
 	};
 
-	this.displayFilteredMarkers = function() {
+	// This function update the bounds of the map when 
+	// the filter button is clicked
+	this.filterMarkers = function() {
 		self.toggleShowClass();
 		self.closeNytArticles();
-		var markers = model.markers;
  		model.bounds = new google.maps.LatLngBounds();
-		for (var i=0; i < markers.length; i++) {
-			if (markers[i].map) {
-				model.bounds.extend(markers[i].position);
-			}
-		}
-
-		model.map.fitBounds(model.bounds);
+		self.displayFilteredMarkers();
 	}
 
+	// This function call the populateIndoWindow function
+	// when a location is clicked on the list
 	this.locationListListener = function(data) {
 		var marker = model.markers[data.id];
 		self.closeNytArticles();
 		self.populateInfoWindow(marker, model.infowindow);
 	};
 
+	// This function configures the GoogleStreetView Service
 	this.configStreetView = function(marker) {
 		function getStreetView(data, status) {
 			if (status == google.maps.StreetViewStatus.OK) {
@@ -184,6 +201,8 @@ var ViewModel = function() {
 		return model.streetViewService.getPanoramaByLocation(marker.position, 30, getStreetView)
 	};
 
+	// This function show the New York Times articles for selected
+	// location
 	this.showNytArticles = function(marker) {
 		var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
 		url += "?" + $.param({
@@ -192,7 +211,7 @@ var ViewModel = function() {
 		}); 
 
 		$.getJSON(url, function(data) {
-			self.nytHeader("Articles About " + marker.title);
+			self.nytHeader("New York Times articles about " + marker.title);
 			self.nytArticles([]);
 			var items = data.response.docs; 
 			for (var i=0; i < items.length; i++) {
@@ -206,10 +225,12 @@ var ViewModel = function() {
 		$(document.getElementById("nyt-articles")).show();
 	}
 
+	// Change the visibility of the options-box
 	this.toggleShowClass = function() {
 		$(document.getElementById("options-box")).toggleClass("show");
 	}
 
+	// Change the visibility of the NYTImes
 	this.closeNytArticles = function() {
 		$(document.getElementById("nyt-articles")).hide();
 	}
@@ -218,13 +239,14 @@ var ViewModel = function() {
 ViewModel = new ViewModel();
 ko.applyBindings(ViewModel);
 
-function initMap() {
 
+// This function is called when the Google Maps API is loaded
+// It creates all the necessary google.maps objects and 
+// call ViewModel functions to store them in the model
+function initMap() {
 	var bounds = new google.maps.LatLngBounds(); 
 	var infowindow = new google.maps.InfoWindow(); 
 	var streetViewService = new google.maps.StreetViewService();
-
-
 	var map = new google.maps.Map(document.getElementById("map"), {
 		center: {lat: 37.3700, lng: -122.0400}, 
 		zoom: 13
