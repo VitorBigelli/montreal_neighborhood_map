@@ -115,15 +115,26 @@ var ViewModel = function() {
 
 			//Listener to close the NYTimes articles when the respective
 			//infowindow is closed.
-			model.infowindow.addListener("closeclick", self.closeNytArticles);
+			model.infowindow.addListener("closeclick", function() {
+				self.closeNytArticles();
+				self.selectedMarker.setAnimation(null);
+			});
 		}
 		self.showNytArticles(marker);
 		self.displayInfoWindow(marker);
 	};
 
+	this.selectedMarker = null;
+
 	this.displayInfoWindow = function(marker) {
 		var id = marker.id;
 		self.configStreetView(model.markers[id]);
+
+		if (self.selectedMarker != marker && self.selectedMarker != null) {
+			self.selectedMarker.setAnimation(null);
+		}
+			self.selectedMarker = marker;
+			self.selectedMarker.setAnimation(google.maps.Animation.BOUNCE);
 		model.infowindow.open(model.map, marker);
 	};
 
@@ -187,7 +198,11 @@ var ViewModel = function() {
 			for (var i=0; i < items.length; i++) {
 				self.nytArticles.push(ko.observable(items[i]));
 			};
-		});
+			if (!self.nytArticles().length) {
+				$(document.getElementById("nyt-articles-list")).append("<div class='nyt-article-snippet'>New York Times Articles Could Not Be Loaded</li>")
+			}
+		})
+
 		$(document.getElementById("nyt-articles")).show();
 	}
 
@@ -222,7 +237,7 @@ function initMap() {
 		marker = new google.maps.Marker({
 			title: locations[i].title, 
 			position: locations[i].position, 
-			id: locations[i].id
+			id: locations[i].id,
 		}); 
 		marker.addListener("click", function(marker) {
 			ViewModel.populateInfoWindow(this);
