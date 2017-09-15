@@ -207,17 +207,6 @@ var ViewModel = function() {
 			for (var i=0; i < items.length; i++) {
 				self.nytArticles.push(ko.observable(items[i]));
 			};
-			if (!self.nytArticles().length) {
-				var error = { 
-						headline: { 
-							main: ""
-						},
-						snippet: "New York Times Articles Could Not Be Loaded",
-						web_url: ""
-					};
-				self.nytArticles.push(ko.observable(error));
-				self.nytHeader("Not found");
-			}
 		}).fail( function(e) {
 				window.alert("New York Times Articles Could Not Be Loaded")
 		});
@@ -272,3 +261,6 @@ function initMap() {
 	ViewModel.initMap(map, markers, bounds, infowindow, streetViewService); 
 }
 
+function mapError() {
+	window.alert("ERROR. Please, refresh the page.")
+}
