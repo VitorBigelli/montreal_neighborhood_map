@@ -81,6 +81,8 @@ var ViewModel = function() {
 			hasString = location.title.toLowerCase().indexOf(filter.toLowerCase()) > -1;
 			if (!hasString) {
 				self.hideMarkerById(location.id);
+			} else {
+				self.displayMarker(model.markers[location.id]);
 			}
 			return hasString;
 		});
