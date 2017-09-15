@@ -33,17 +33,18 @@ var ViewModel = function() {
 			position: location.position, 
 			id: i
 		});
-	}
+	};
 
-	this.displayAllMarkers = function() {
+	this.displayAllMarkers = function(data) {
 		for (var i=0; i < model.markers.length; i++) {
-			displayMarker(model.markers[i]);
+			self.displayMarker(model.markers[i]);
+			model.bounds.extend(markers[i].position);
 		}
-	}
+	};
 
 	this.displayMarker = function(marker) {
 		marker.setMap(model.map);
-	}
+	};
 
 	this.hideMarkerById = function(id) {
 		var markers = model.markers;
@@ -96,17 +97,15 @@ var ViewModel = function() {
 
 	this.displayMarkers = function() {
 		markers = model.markers;
-		bounds = model.bounds
 		for (var i=0; i < markers.length; i++) {
 			for (var j=0; j < self.filteredLocations().length; j++) {
 				if (markers[i].id === self.filteredLocations()[i].id);
 				self.displayMarker(markers[i]);
 				model.bounds.extend(markers[i].position)
 			}
- 			model.map.fitBounds(bounds);
+ 			model.map.fitBounds(model.bounds);
 		}
 	};
-
 
 	this.populateInfoWindow = function(marker) {
 		if (model.infowindow.marker != marker) {
@@ -127,6 +126,20 @@ var ViewModel = function() {
 		self.configStreetView(model.markers[id]);
 		model.infowindow.open(model.map, marker);
 	};
+
+	this.displayFilteredMarkers = function() {
+		self.toggleShowClass();
+		self.closeNytArticles();
+		var markers = model.markers;
+ 		model.bounds = new google.maps.LatLngBounds();
+		for (var i=0; i < markers.length; i++) {
+			if (markers[i].map) {
+				model.bounds.extend(markers[i].position);
+			}
+		}
+
+		model.map.fitBounds(model.bounds);
+	}
 
 	this.locationListListener = function(data) {
 		var marker = model.markers[data.id];
@@ -168,14 +181,14 @@ var ViewModel = function() {
 		}); 
 
 		$.getJSON(url, function(data) {
-			self.nytHeader("New York Times Articles About " + marker.title);
+			self.nytHeader("Articles About " + marker.title);
 			self.nytArticles([]);
 			var items = data.response.docs; 
 			for (var i=0; i < items.length; i++) {
 				self.nytArticles.push(ko.observable(items[i]));
 			};
 		});
-		$(document.getElementById("nyt-articles")).addClass("show-nyt-articles");
+		$(document.getElementById("nyt-articles")).show();
 	}
 
 	this.toggleShowClass = function() {
@@ -183,7 +196,7 @@ var ViewModel = function() {
 	}
 
 	this.closeNytArticles = function() {
-		$(document.getElementById("nyt-articles")).removeClass("show-nyt-articles");
+		$(document.getElementById("nyt-articles")).hide();
 	}
 };
 

@@ -75,15 +75,14 @@ li {
 
 #location-text {
 	width: 80%;
-	font-size: 18px;
+	font-size: 16px;
 }
 
 #filter {
 	width: 100%;
 	display: flex;
 	flex-wrap: wrap;
-	font-size: 50px;
-	height: 50px;
+	height: 40px;
 }
 
 #filter-location {
@@ -116,29 +115,48 @@ li {
 
 #nyt-articles {
 	position: absolute; 
-	left: -300px; 
+	left: 15px; 
 	bottom: 0;
 	width: 90%; 
 	height: 200px;
 	z-index: 1;
-	background: rgba(50,50,50,0.9);
-	color: #fff;
+	background: #fff;
+	color: #333;
 	transition: 0.6s;
 	overflow-y: scroll;
 	padding: 5px;
+	display: none;
 }
 
 .show-nyt-articles {
-	transform: translateX(315px);
-	transition: 0.6s;
+	display: visible;
 }
 
 .nyt-article {
 	font-size: 16px;
-	color: #ccc;
+	color: #666;
 }
 
 #close-nyt-articles {
 	width: auto; 
 	float: right;	
+}
+
+
+.nyt-article-snippet {
+	margin-bottom: 10px;
+}
+
+#nyt-img {
+	width: 70%;
+	margin-left: 15%;
+	margin-right: 15%;
+}
+
+#nyt-img-container {
+	width: 100%;
+}
+
+#close-nyt-articles:hover {
+	cursor: pointer;
 }

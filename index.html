@@ -17,8 +17,8 @@
 			</div>
 		<h2>Silicon Valley Locations</h2>
 		<div id="filter">
-			<input type="search" placeholder="The Tech Museum of Innovation" id="location-text" data-bind="textInput: filter, change: $parent.updateMarkers">
-			<input type="button" id="filter-location" value="Filter" data-bind="click: ViewModel.toggleShowClass">
+			<input type="search" placeholder="The Tech Museum of Innovation" id="location-text" data-bind="textInput: filter">
+			<input type="button" id="filter-location" value="Filter" data-bind="click: displayFilteredMarkers">
 		</div>
 		<ul data-bind="foreach: filteredLocations, click: toggleShowClass">
 			<li class="place-item" data-bind="text: title, click: $parent.locationListListener"> </li>
@@ -34,9 +34,15 @@
 
 	<div id="nyt-articles">
 		<span id="close-nyt-articles" data-bind="click: closeNytArticles"> Close (X) </span>
+		<span id="nyt-img-container">
+			<img src="https://gclibrary.commons.gc.cuny.edu/files/2014/04/nytimes-white.png" id="nyt-img">
+		</span>
 		<h4 data-bind="text: nytHeader"></h4>
 		<ul id="nyt-articles-list" data-bind="foreach: nytArticles">
+			<a data-bind="attr: {href: web_url}">
 			<li class="nyt-article" data-bind="text: headline.main"></li>
+			</a>
+			<div class="nyt-article-snippet" data-bind="text: snippet"></div>
 		</ul>
 	</div>
 	
