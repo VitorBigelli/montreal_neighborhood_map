@@ -33,7 +33,8 @@
 	</div>
 
 	<div id="nyt-articles">
-		<h4 data-bind="text: nytHeader"> </h4>
+		<span id="close-nyt-articles" data-bind="click: closeNytArticles"> Close (X) </span>
+		<h4 data-bind="text: nytHeader"></h4>
 		<ul id="nyt-articles-list" data-bind="foreach: nytArticles">
 			<li class="nyt-article" data-bind="text: headline.main"></li>
 		</ul>

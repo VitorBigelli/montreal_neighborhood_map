@@ -166,7 +166,7 @@ var ViewModel = function() {
 
 		$.getJSON(url, function(data) {
 			self.nytHeader("New York Times Articles About " + marker.title);
-			console.log(self.nytHeader());
+			self.nytArticles([]);
 			var items = data.response.docs; 
 			for (var i=0; i < items.length; i++) {
 				console.log(items[i]);
@@ -178,6 +178,10 @@ var ViewModel = function() {
 
 	this.toggleShowClass = function() {
 		$(document.getElementById("options-box")).toggleClass("show");
+	}
+
+	this.closeNytArticles = function() {
+		$(document.getElementById("nyt-articles")).removeClass("show-nyt-articles");
 	}
 };
 
