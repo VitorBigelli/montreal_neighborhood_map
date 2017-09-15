@@ -9,7 +9,7 @@
 	<script src="js/knockout-3.4.2.js"></script>
 </head>
 <body>
-	<aside id="options-box">
+	<aside id="options-box" data-bind="css: {show: toggleOptionsBox()}">
 			<div id="hamburger-menu" data-bind="click: ViewModel.toggleShowClass">
 				<div></div>
 				<div></div>
@@ -31,9 +31,9 @@
 	<main id="map">
 	</main>
 
-	<article>
+	<article data-bind="visible: visualizeArticles">
 		
-		<span id="close-nyt-articles" data-bind="click: closeNytArticles"> Close (X) </span>
+		<span id="close-nyt-articles" data-bind="click: "> Close (X) </span>
 		
 		<h4 data-bind="text: nytHeader"> </h4>
 		

@@ -14,6 +14,8 @@ var ViewModel = function() {
 	this.filter = ko.observable("");
 	this.nytArticles = ko.observableArray([]);
 	this.nytHeader = ko.observable("");
+	this.visualizeArticles = ko.observable(false);
+
 
 	// Pushing the locations into an observableArray
 	for (var i=0; i < locations.length; i++) {
@@ -124,7 +126,7 @@ var ViewModel = function() {
 			//Listener to close the NYTimes articles when the respective
 			//infowindow is closed.
 			model.infowindow.addListener("closeclick", function() {
-				self.closeNytArticles();
+				self.visualizeArticles(false);
 				self.selectedMarker.setAnimation(null);
 			});
 		}
@@ -209,23 +211,30 @@ var ViewModel = function() {
 			};
 		})
 		.done( function() {
-			$(document.getElementsByTagName("article")).show();
+			self.visualizeArticles(true);
+			console.log(self.visualizeArticles());
 		})
 		.fail( function(e) {
-				window.alert("New York Times Articles Could Not Be Loaded")
+			window.alert("New York Times Articles Could Not Be Loaded")
 		})
-		
 		
 	};
 
+	this.toggleOptionsBox = ko.observable(false);
+
 	// Change the visibility of the options-box
 	this.toggleShowClass = function() {
-		$(document.getElementById("options-box")).toggleClass("show");
+		if (this.toggleOptionsBox()) {
+			this.toggleOptionsBox(false);
+
+		} else {
+			this.toggleOptionsBox(true);
+		}
 	}
 
 	// Change the visibility of the NYTImes
 	this.closeNytArticles = function() {
-		$(document.getElementsByTagName("article")).hide();
+		self.visualizeArticles(false);
 	}
 };
 
