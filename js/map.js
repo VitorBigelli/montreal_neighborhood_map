@@ -201,21 +201,23 @@ var ViewModel = function() {
 		}); 
 
 		$.getJSON(url, function(data) {
-			self.nytHeader("New York Times articles about " + marker.title);
 			self.nytArticles([]);
 			var items = data.response.docs; 
+			self.nytHeader("New York Times articles about " + marker.title);
 			for (var i=0; i < items.length; i++) {
 				self.nytArticles.push(ko.observable(items[i]));
 			};
-			var error = { 
-					headline: { 
-						main: ""
-					},
-					snippet: "New York Times Articles Could Not Be Loaded",
-					web_url: ""
-				};
-				self.nytHeader("Not found");
+			if (!self.nytArticles().length) {
+				var error = { 
+						headline: { 
+							main: ""
+						},
+						snippet: "New York Times Articles Could Not Be Loaded",
+						web_url: ""
+					};
 				self.nytArticles.push(ko.observable(error));
+				self.nytHeader("Not found");
+			}
 		}).fail( function(e) {
 				window.alert("New York Times Articles Could Not Be Loaded")
 		});

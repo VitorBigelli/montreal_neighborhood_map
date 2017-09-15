@@ -38,10 +38,11 @@
 		<h4 data-bind="text: nytHeader"> </h4>
 		
 		<ul id="nyt-articles-list" data-bind="foreach: nytArticles">
-			<li class="nyt-article" data-bind="text: headline.main">
-				<a data-bind="attr: {href: web_url}">
-				<span class="nyt-article-snippet" data-bind="text: snippet"></span>
-				</a>
+			<li class="nyt-article">
+				<a data-bind="attr: {href: web_url}, text: headline.main">
+				</a><br>
+				<p class="nyt-article-snippet" data-bind="text: snippet"></p>
+				
 			</li>
 
 		</ul>
