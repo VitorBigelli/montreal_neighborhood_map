@@ -194,7 +194,7 @@ var ViewModel = function() {
 	// This function show the New York Times articles for selected
 	// location
 	this.showNytArticles = function(marker) {
-		var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
+		var url = "https://api.nytisadfasdfasdfmes.com/svc/search/v2/articlesearch.json";
 		url += "?" + $.param({
 			'api-key': "2954f517830e4fcf9242caa8eef9f2be",
 			'q': marker.title
@@ -207,21 +207,20 @@ var ViewModel = function() {
 			for (var i=0; i < items.length; i++) {
 				self.nytArticles.push(ko.observable(items[i]));
 			};
-			if (!self.nytArticles().length) {
-				var error = { 
+			var error = { 
 					headline: { 
-						main: "Not Found"
+						main: ""
 					},
 					snippet: "New York Times Articles Could Not Be Loaded",
-					web_url: "#"
-				}
-
+					web_url: ""
+				};
+				self.nytHeader("Not found");
 				self.nytArticles.push(ko.observable(error));
-			}
-		})
-
-		$(document.getElementById("nyt-articles")).show();
-	}
+		}).fail( function(e) {
+				window.alert("New York Times Articles Could Not Be Loaded")
+		});
+		$(document.getElementsByTagName("article")).show();
+	};
 
 	// Change the visibility of the options-box
 	this.toggleShowClass = function() {
@@ -230,7 +229,7 @@ var ViewModel = function() {
 
 	// Change the visibility of the NYTImes
 	this.closeNytArticles = function() {
-		$(document.getElementById("nyt-articles")).hide();
+		$(document.getElementsByTagName("article")).hide();
 	}
 };
 

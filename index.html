@@ -9,7 +9,7 @@
 	<script src="js/knockout-3.4.2.js"></script>
 </head>
 <body>
-	<div id="options-box">
+	<aside id="options-box">
 			<div id="hamburger-menu" data-bind="click: ViewModel.toggleShowClass">
 				<div></div>
 				<div></div>
@@ -22,26 +22,31 @@
 		</div>
 		<ul data-bind="foreach: filteredLocations, click: toggleShowClass">
 			<li class="place-item" data-bind="text: title, click: $parent.locationListListener"> </li>
-			<hr>
 		</ul>
-	</div>
+	</aside>
 
-	<div id="header">
-	</div>
+	<header>
+	</header>
 	
-	<div id="map">
-	</div>
+	<main id="map">
+	</main>
 
-	<div id="nyt-articles">
+	<article>
+		
 		<span id="close-nyt-articles" data-bind="click: closeNytArticles"> Close (X) </span>
-		<h4 data-bind="text: nytHeader"></h4>
+		
+		<h4 data-bind="text: nytHeader"> </h4>
+		
 		<ul id="nyt-articles-list" data-bind="foreach: nytArticles">
-			<a data-bind="attr: {href: web_url}">
-			<li class="nyt-article" data-bind="text: headline.main"></li>
-			</a>
-			<div class="nyt-article-snippet" data-bind="text: snippet"></div>
+			<li class="nyt-article" data-bind="text: headline.main">
+				<a data-bind="attr: {href: web_url}">
+				<span class="nyt-article-snippet" data-bind="text: snippet"></span>
+				</a>
+			</li>
+
 		</ul>
-	</div>
+
+	</article>
 	
 	<script src="js/data.js"></script>
 	<script src="js/map.js"></script>

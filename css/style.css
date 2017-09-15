@@ -7,6 +7,34 @@ body {
 	padding: 0;
 }
 
+header {
+	height: 50px;
+	background-color: #232323;
+	transition: 0.6s;
+}
+
+main {
+	transition: 0.6s;
+	width: 100%;
+	height: calc(100% - 50px);
+}
+
+article {
+	position: absolute; 
+	bottom: 0;
+	left: 10px;
+	width: 300px; 
+	height: 200px;
+	z-index: 1;
+	background: #fff;
+	color: #333;
+	transition: 0.6s;
+	overflow-y: scroll;
+	padding: 5px;
+	display: none;
+}
+
+
 h2 {
 	font-size: 20px;
 	color: #f3f3f3;
@@ -17,7 +45,6 @@ ul {
 	padding: 0;
 }
 
-
 li {
 	width: 100%;
 	text-align: left;	
@@ -27,6 +54,8 @@ li {
 	color: #666;
 	vertical-align: middle
 }
+
+/*----------------ID's----------------*/
 
 #options-box {
 	transition: 0.6s;
@@ -39,12 +68,6 @@ li {
 	background-color: #323232;
 	padding: 0;
 	z-index: 2;
-}
-
-#header {
-	height: 50px;
-	background-color: #232323;
-	transition: 0.6s;
 }
 
 #hamburger-menu {
@@ -67,11 +90,7 @@ li {
 	cursor: pointer;
 }
 
-#map {
-	transition: 0.6s;
-	width: 100%;
-	height: calc(100% - 50px);
-}
+
 
 #location-text {
 	width: 80%;
@@ -93,6 +112,23 @@ li {
 	font-weight: bold;
 }
 
+#pano {
+	width: 200px; 
+	height: 150px;
+}
+
+#close-nyt-articles {
+	width: auto; 
+	float: right;	
+}
+
+#close-nyt-articles:hover {
+	cursor: pointer;
+}
+
+
+/*----------------Classes----------------*/
+
 .show {
 	transform: translateX(250px);
 	transition: 0.6s;
@@ -108,26 +144,6 @@ li {
 	font-family: "Arial", "Open Sans";
 }
 
-#pano {
-	width: 200px; 
-	height: 150px;
-}
-
-#nyt-articles {
-	position: absolute; 
-	bottom: 0;
-	left: 10px;
-	width: 300px; 
-	height: 200px;
-	z-index: 1;
-	background: #fff;
-	color: #333;
-	transition: 0.6s;
-	overflow-y: scroll;
-	padding: 5px;
-	display: none;
-}
-
 .show-nyt-articles {
 	display: visible;
 }
@@ -137,22 +153,16 @@ li {
 	color: #666;
 }
 
-#close-nyt-articles {
-	width: auto; 
-	float: right;	
-}
-
 
 .nyt-article-snippet {
 	margin-bottom: 10px;
 }
 
-#close-nyt-articles:hover {
-	cursor: pointer;
-}
+
+/*----------------Media Queries----------------*/
 
 @media screen and (min-width: 750px) {
-	#nyt-articles {
+	article {
 		top: 50px;
 		right: 0;
 		left: auto;
