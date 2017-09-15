@@ -208,7 +208,15 @@ var ViewModel = function() {
 				self.nytArticles.push(ko.observable(items[i]));
 			};
 			if (!self.nytArticles().length) {
-				$(document.getElementById("nyt-articles-list")).append("<div class='nyt-article-snippet'>New York Times Articles Could Not Be Loaded</li>")
+				var error = { 
+					headline: { 
+						main: "Not Found"
+					},
+					snippet: "New York Times Articles Could Not Be Loaded",
+					web_url: "#"
+				}
+
+				self.nytArticles.push(ko.observable(error));
 			}
 		})
 
