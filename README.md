@@ -9,9 +9,11 @@ An interactive map of the neighbourhood of Silicon Valley, CA, United States usi
 ```
 python -m http.server 8000
 ```
-3. At this point, you should be able to access the ``index.html`` file by accessing the ``http://localhost:8000/``
+3. At this point, you should be able to access the ``index.html`` file by accessing the ``http://localhost:8000/`` on your browser.
 4. Open a new Command Prompt and inside the directory execute the ``ngrok`` by writting
 ```
 ngrok.exe http 8000
 ```
 5. Use the generated URL to access the application from any device. 
+
+Alternatively, you can follow the step 1 then navigate throught the operational system to the created directory and double click the ``index.html`` file.
